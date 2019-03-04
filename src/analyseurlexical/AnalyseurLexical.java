@@ -67,6 +67,8 @@ public class AnalyseurLexical {
             Logger.getLogger(AnalyseurLexical.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        
+        
         ArrayList<Etat> etats = new ArrayList<>();
         ArrayList<Transition> trans = new ArrayList<>();
         for(Ligne l : lignes){
@@ -133,6 +135,34 @@ public class AnalyseurLexical {
         }
         
         this.automate = new Automate(etats, trans);
+    }
+    
+    public boolean analyseLexicale(){
+        boolean fichierOk = false;
+        boolean v=false,e=false,f = false;
+        for(int i = 0;i<this.lignes.size()-1;i++){
+            switch(this.lignes.get(i).getType()){
+                case 'C' :  
+                case 'M' : 
+                    if(this.lignes.get(i).getLexemes().size()>1){
+                        System.out.println("");
+                    }
+                case 'E' :
+                    e=true;
+                case 'I' :
+                case 'F' :
+                    f=true;
+                case 'V' :
+                    v=true;
+                case 'O' :
+                case 'T' :
+            }
+        }
+        if(!v || !e || !f){
+            System.out.println("LIGNE OBLIGATOIRE NON INITIALISEE");
+            return false;
+        }
+        return fichierOk;
     }
     
     public void traitementEntree(String entree){
