@@ -36,9 +36,11 @@ public class Ligne {
                 this.lexemes.add(com);
                 break;
             case 'M' :
-                for(int i=0;i<mots[1].length();i++){
-                    if(mots[1].charAt(i)!='\''){
-                        this.lexemes.add(String.valueOf(mots[1].charAt(i)));
+                for(int i=1;i<mots.length;i++){
+                    for(int j=0;j<mots[i].length();j++){
+                    if(mots[i].charAt(j)!='\''){
+                        this.lexemes.add(String.valueOf(mots[i].charAt(j)));
+                    }
                     }
                 }
                 break;

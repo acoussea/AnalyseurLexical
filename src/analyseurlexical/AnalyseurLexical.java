@@ -31,6 +31,10 @@ import javafx.stage.FileChooser;
  * @author couss
  */
 public class AnalyseurLexical {
+    public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
+    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+
     private ArrayList<Ligne> lignes;
     private File descr;
     private Automate automate;
@@ -67,7 +71,16 @@ public class AnalyseurLexical {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AnalyseurLexical.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        if(this.analyseLexicale()){
+            this.createAutomate();
+            System.out.println(ANSI_GREEN_BACKGROUND+ANSI_WHITE+"Analyse effectuée"+ANSI_WHITE+ANSI_GREEN_BACKGROUND);
+        }else{
+            System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : Analyse impossible"+ANSI_WHITE+ANSI_RED_BACKGROUND);
+        }
+    }
+    
+    
+    public void createAutomate(){
         ArrayList<Etat> etats = new ArrayList<>();
         ArrayList<Transition> trans = new ArrayList<>();
         ArrayList<Character> voc = new ArrayList<>();
@@ -86,7 +99,6 @@ public class AnalyseurLexical {
                             }
                         }
                     }
-                    
                     break;
                 case 'F' :
                     boolean existeEntree = false;
@@ -98,7 +110,6 @@ public class AnalyseurLexical {
                     if(!existeEntree){//entree par def = 0
                         etats.get(0).setIsInit(true);
                     }
-                    //------
                     for(int i=0;i<l.getLexemes().size();i++){
                         for(Etat e : etats){
                             if(e.getNumero()==Integer.parseInt(l.getLexemes().get(i))){
@@ -135,11 +146,101 @@ public class AnalyseurLexical {
                     for (String str : l.getLexemes()) {
                         voc.add(str.charAt(0));
                     }
+                    break;
             }
         }
-        
         this.automate = new Automate(etats, trans, voc);
     }
+    
+    
+    public boolean analyseLexicale(){
+        int cpt=1;
+        boolean fichierOk = true;
+        boolean v=false,e=false,f = false;
+        Ligne ligneV=null,ligneO=null;
+        for(int i = 0;i<this.lignes.size()-1;i++){
+            switch(this.lignes.get(i).getType()){
+                case 'C' :
+                    break;
+                case 'M' : 
+                    System.out.println("--------------------------------"+this.lignes.get(i).getLexemes().size());
+                    if(this.lignes.get(i).getLexemes().size()!=1){
+                        System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : La ligne M ne respecte pas sa description (1 caractère), ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                        return false;
+                    }
+                    break;
+                case 'E' :
+                    try{
+                        Integer.parseInt(this.lignes.get(i).getLexemes().get(0));
+                    }catch(Exception exc){
+                        System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : E ne contient pas un nombre -> "+this.lignes.get(i).getLexemes().get(0)+", ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                        return false;
+                    }
+                    e=true;
+                    break;
+                case 'I' :
+                    for(int j=0;j<this.lignes.get(i).getLexemes().size();j++){
+                        try{
+                            Integer.parseInt(this.lignes.get(i).getLexemes().get(j));
+                        }catch(Exception ex){
+                            System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : I ne contient pas des nombres -> " + this.lignes.get(i).getLexemes().get(j)+", ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                            return false;
+                        }
+                    }
+                    break;
+                case 'F' : 
+                    f=true;
+                    for(int j=0;j<this.lignes.get(i).getLexemes().size();j++){
+                        try{
+                            Integer.parseInt(this.lignes.get(i).getLexemes().get(j));
+                        }catch(Exception ex){
+                            System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : F ne contient pas des nombres -> " + this.lignes.get(i).getLexemes().get(j)+", ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                            return false;
+                        }
+                    }
+                    break;
+                case 'V' :
+                    ligneV = this.lignes.get(i);
+                    v=true;
+                    break;
+                case 'O' :
+                    ligneO = this.lignes.get(i);
+                    break;
+                case 'T' :
+                    if(this.lignes.get(i).getLexemes().size()<3 || this.lignes.get(i).getLexemes().size()>4){
+                        System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : La transition comporte 3 ou 4 elements, ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                        return false;
+                    }
+                    if(!ligneV.getLexemes().contains(this.lignes.get(i).getLexemes().get(1).replace("'", ""))){
+                        System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : Mot inconnu V, ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                        return false;
+                    }
+                    if(this.lignes.get(i).getLexemes().size()>3){
+                        if(!ligneO.getLexemes().contains(this.lignes.get(i).getLexemes().get(3).replace("'", ""))){
+                            System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : Mot inconnu O, ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                            return false;
+                        }
+                    }
+                    try{
+                        Integer.parseInt(this.lignes.get(i).getLexemes().get(0));
+                        Integer.parseInt(this.lignes.get(i).getLexemes().get(2));
+                    }catch(Exception ex){
+                        System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : Les etats doivent être numeriques, ligne " +cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                        return false;
+                    }
+                    break;
+            }
+            cpt++;
+        }
+        if(!v || !e || !f){
+            System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : LIGNE OBLIGATOIRE NON INITIALISEE"+ANSI_WHITE+ANSI_RED_BACKGROUND);
+            return false;
+        }
+        return fichierOk;
+    }
+    
+    
+    
     
     public void traitementEntree(String entree){
         System.out.println("Traitement des phrases lues :");
