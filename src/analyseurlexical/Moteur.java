@@ -5,6 +5,7 @@
  */
 package analyseurlexical;
 
+import automate.Automate;
 import automate.Etat;
 import java.awt.FileDialog;
 import java.awt.Frame;
@@ -38,7 +39,13 @@ public class Moteur {
                 + "110\n"
                 + "###");
         
+        
+        /*
+            PARTIE NON-DETERMINISTE
+        */
         AEFND afnd = new AEFND();
+        
+        /*
         List<Etat> T = new ArrayList<>();
         T.add(new Etat(0));
         ArrayList<Etat> res = afnd.lambda_fermeture(T, al.getAutomate());
@@ -60,9 +67,11 @@ public class Moteur {
         for (char c : al.getAutomate().getVoc()) {
             System.out.print(c + " ");
         }
-        
+        */
         System.out.println("    --  DETERMINISATION --  ");
-        afnd.dertiminiser(al.getAutomate());
+        Automate NDtoD = afnd.dertiminiser(al.getAutomate());
+        
+        afnd.descrToDot(NDtoD, "NDD01");
     }
     
 }

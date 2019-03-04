@@ -25,4 +25,18 @@ public class TransitionND {
     public String toString() {
         return this.entree + " -> " + this.caractere + " -> " + this.sortie;
     }
+
+    public ArrayList<Etat> getEntree() {
+        return entree;
+    }
+
+    public ArrayList<Etat> getSortie() {
+        return sortie;
+    }
+
+    public char getCaractere() {
+        return caractere;
+    }
+    
+    
 }
