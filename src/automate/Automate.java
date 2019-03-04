@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Automate { //DETERMINISTE
     private ArrayList<Etat> etats;
     private ArrayList<Transition> transitions;
+    private ArrayList<Character> voc;
 
     public Automate(ArrayList<Etat> etats, ArrayList<Transition> transitions) {
         this.etats = etats;
@@ -22,6 +23,12 @@ public class Automate { //DETERMINISTE
 
     public Automate(ArrayList<Etat> etats) {
         this.etats = etats;
+    }
+    
+    public Automate(ArrayList<Etat> etats, ArrayList<Transition> transitions, ArrayList<Character> voc) {
+        this.etats = etats;
+        this.transitions = transitions;
+        this.voc = voc;
     }
 
     public ArrayList<Etat> getEtats() {
@@ -69,5 +76,10 @@ public class Automate { //DETERMINISTE
         }
         return finaux;
     }
+
+    public ArrayList<Character> getVoc() {
+        return voc;
+    }
+    
     
 }

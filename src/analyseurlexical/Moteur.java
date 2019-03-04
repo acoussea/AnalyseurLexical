@@ -55,6 +55,14 @@ public class Moteur {
             System.out.print(e.getNumero() + " ");
         }
         System.out.println();
+        
+        System.out.println(" -- Vocabulaire -- ");
+        for (char c : al.getAutomate().getVoc()) {
+            System.out.print(c + " ");
+        }
+        
+        System.out.println("    --  DETERMINISATION --  ");
+        afnd.dertiminiser(al.getAutomate());
     }
     
 }

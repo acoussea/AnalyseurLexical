@@ -20,7 +20,7 @@ import java.util.Stack;
  * @author Thomas
  */
 public class AEFND {
-    public ArrayList<Etat> transiter(List<Etat> T, char a, Automate aut) {
+    public ArrayList<Etat> transiter(ArrayList<Etat> T, char a, Automate aut) {
         ArrayList<Etat> F = new ArrayList<>();
         for(Etat e : T) {
             List<Transition> voisins = getTransitionsof(e, aut.getTransitions());
@@ -85,7 +85,7 @@ public class AEFND {
         return tr;
     }
     
-    public Automate dertiminiser(Automate a) {
+    public void dertiminiser(Automate a) {
         Stack<ArrayList<Etat>> P = new Stack<>();
         P.push(lambda_fermeture(a.getInitiaux(), a));
         ArrayList<ArrayList<Etat>> L = new ArrayList<>();
@@ -93,11 +93,28 @@ public class AEFND {
         
         while(!P.isEmpty()) {
             ArrayList<Etat> T = P.pop();
-            if(!L.contains(T)) {
-                L.add(T);
-                
+            if(!T.isEmpty()) {
+                if(!L.contains(T)) {
+                    L.add(T);
+                    for(char c : a.getVoc()) {
+                        ArrayList<Etat> U = lambda_fermeture(transiter(T, c, a), a);
+                        if(!U.isEmpty()) {
+                            D.add(new TransitionND(T, U, c));
+                            P.push(U);
+                        }
+                    }
+                }
             }
         }
-        return null;
+        
+        System.out.println("Etats : ");
+        for(ArrayList<Etat> e : L) {
+            System.out.println(e);
+        }
+        
+        System.out.println("Transitions : ");
+        for(TransitionND t : D) {
+            System.out.println(t);
+        }
     }
 }

@@ -20,4 +20,9 @@ public class TransitionND {
         this.sortie = s;
         this.caractere = c;
     }
+    
+    @Override
+    public String toString() {
+        return this.entree + " -> " + this.caractere + " -> " + this.sortie;
+    }
 }

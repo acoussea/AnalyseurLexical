@@ -69,6 +69,7 @@ public class AnalyseurLexical {
         
         ArrayList<Etat> etats = new ArrayList<>();
         ArrayList<Transition> trans = new ArrayList<>();
+        ArrayList<Character> voc = new ArrayList<>();
         for(Ligne l : lignes){
             switch(l.getType()){
                 case 'E' :
@@ -129,10 +130,14 @@ public class AnalyseurLexical {
                         trans.add(new Transition(entree, sortie, l.getLexemes().get(1).charAt(1)));
                     }
                     break;
+                case 'V' : 
+                    for (String str : l.getLexemes()) {
+                        voc.add(str.charAt(0));
+                    }
             }
         }
         
-        this.automate = new Automate(etats, trans);
+        this.automate = new Automate(etats, trans, voc);
     }
     
     public void traitementEntree(String entree){
