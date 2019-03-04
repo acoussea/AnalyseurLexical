@@ -29,6 +29,7 @@ public class Moteur {
         
         AnalyseurLexical al = new AnalyseurLexical();
         al.afficheDescrLignes();
+        al.descrToDot();
     }
     
 }
