@@ -122,10 +122,10 @@ public class AEFND {
             System.out.println(t);
         }
         
-        return toAutomate(L, D);
+        return toAutomate(L, D, a.getVoc());
     }
     
-    public Automate toAutomate(ArrayList<ArrayList<Etat>> L, ArrayList<TransitionND> D) {
+    public Automate toAutomate(ArrayList<ArrayList<Etat>> L, ArrayList<TransitionND> D, ArrayList<Character> voc) {
         ArrayList<Etat> etats = new ArrayList<>();
         ArrayList<Transition> transitions = new ArrayList<>();
         for (ArrayList<Etat> e : L) {
@@ -139,30 +139,34 @@ public class AEFND {
             etats.get(L.indexOf(t.getSortie())), t.getCaractere()));
         }
         
-        return new Automate(etats, transitions);
+        return new Automate(etats, transitions, voc);
     }
     
-    public void descrToDot(Automate a, String name){
-        String fileDot = name+".dot";
+    public void genereDescr(Automate a, String name){
+        String fileDot = name+".descr";
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileDot));
-            String init = Integer.toString(a.getInit().getNumero());
-            writer.write("digraph G {\n");
-            writer.write("\t\"\" [shape=none]\n");
-            for(Etat e : a.getFinaux()){
-                    writer.write('\t'+Integer.toString(e.getNumero()) + " [shape=doublecircle]\n");
+            
+            String voc = "\"";
+            for (char c : a.getVoc()) {
+                voc+=c;
             }
-            for(Etat e : a.getInitiaux()){
-                writer.write("\t\"\" ->"+Integer.toString(e.getNumero())+"\n");
+            voc+="\"";
+            writer.write("V " + voc + "\n");
+            writer.write("E " + a.getEtats().size() + "\n");
+            
+            String F = "";
+            for (Etat e : a.getEtats()) {
+                if(getTransitionsof(e, a.getTransitions()).isEmpty()) {
+                    F+=e.getNumero();
+                }
             }
-            for(Transition t : a.getTransitions()){
-                String entree = Integer.toString(t.getEtatEntree().getNumero());
-                String sortie = Integer.toString(t.getEtatSortie().getNumero());
-                String motEntree =String.valueOf(t.getEntree());
-                String motSortie = String.valueOf(t.getSortie());
-                writer.write('\t'+entree + " -> " + sortie +"[label=\""+motEntree+""+"/"+motSortie+"\"];\n");
+            writer.write("F " + F + "\n");
+            
+            for (Transition t : a.getTransitions()) {
+                writer.write("T " + t.getEtatEntree().getNumero() + " '" + t.getEntree() + "' " + t.getEtatSortie().getNumero() + "\n"); 
             }
-            writer.write("}");
+            
             writer.close();
         } catch (IOException ex) {
             Logger.getLogger(AnalyseurLexical.class.getName()).log(Level.SEVERE, null, ex);
