@@ -66,6 +66,16 @@ public class Transition {
         this.sortie = sortie;
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        }else if(obj instanceof Transition) {
+            return etatEntree.equals(((Transition) obj).etatEntree) && 
+                    etatSortie.equals(((Transition) obj).etatSortie);
+        }
+        return false;
+    }
     
     
 }

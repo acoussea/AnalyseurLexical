@@ -52,6 +52,16 @@ public class Etat {
     public void setIsFinal(boolean isFinal) {
         this.isFinal = isFinal;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+        else if(obj instanceof Etat){
+            return this.numero == ((Etat) obj).numero;
+        }
+        return false; //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 }

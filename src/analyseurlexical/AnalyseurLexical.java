@@ -248,4 +248,7 @@ public class AnalyseurLexical {
         this.lignes.add(ligne);
     }
     
+    public Automate getAutomate() {
+        return automate;
+    }
 }
