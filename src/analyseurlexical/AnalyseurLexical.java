@@ -73,9 +73,9 @@ public class AnalyseurLexical {
         }
         if(this.analyseLexicale()){
             this.createAutomate();
-            System.out.println(ANSI_GREEN_BACKGROUND+ANSI_WHITE+"Analyse effectuée"+ANSI_WHITE+ANSI_GREEN_BACKGROUND);
+            System.out.println(ANSI_GREEN_BACKGROUND+"Analyse effectuée"+ANSI_GREEN_BACKGROUND);
         }else{
-            System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : Analyse impossible"+ANSI_WHITE+ANSI_RED_BACKGROUND);
+            System.out.println(ANSI_RED_BACKGROUND+"Erreur : Analyse impossible"+ANSI_RED_BACKGROUND);
         }
     }
     
@@ -165,7 +165,7 @@ public class AnalyseurLexical {
                 case 'M' : 
                     System.out.println("--------------------------------"+this.lignes.get(i).getLexemes().size());
                     if(this.lignes.get(i).getLexemes().size()!=1){
-                        System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : La ligne M ne respecte pas sa description (1 caractère), ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                        System.out.println(ANSI_RED_BACKGROUND+"Erreur : La ligne M ne respecte pas sa description (1 caractère), ligne "+cpt+ANSI_RED_BACKGROUND);
                         return false;
                     }
                     break;
@@ -183,7 +183,7 @@ public class AnalyseurLexical {
                         try{
                             Integer.parseInt(this.lignes.get(i).getLexemes().get(j));
                         }catch(Exception ex){
-                            System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : I ne contient pas des nombres -> " + this.lignes.get(i).getLexemes().get(j)+", ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                            System.out.println(ANSI_RED_BACKGROUND+"Erreur : I ne contient pas des nombres -> " + this.lignes.get(i).getLexemes().get(j)+", ligne "+cpt+ANSI_RED_BACKGROUND);
                             return false;
                         }
                     }
@@ -194,7 +194,7 @@ public class AnalyseurLexical {
                         try{
                             Integer.parseInt(this.lignes.get(i).getLexemes().get(j));
                         }catch(Exception ex){
-                            System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : F ne contient pas des nombres -> " + this.lignes.get(i).getLexemes().get(j)+", ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                            System.out.println(ANSI_RED_BACKGROUND+"Erreur : F ne contient pas des nombres -> " + this.lignes.get(i).getLexemes().get(j)+", ligne "+cpt+ANSI_RED_BACKGROUND);
                             return false;
                         }
                     }
@@ -208,16 +208,16 @@ public class AnalyseurLexical {
                     break;
                 case 'T' :
                     if(this.lignes.get(i).getLexemes().size()<3 || this.lignes.get(i).getLexemes().size()>4){
-                        System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : La transition comporte 3 ou 4 elements, ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                        System.out.println(ANSI_RED_BACKGROUND+"Erreur : La transition comporte 3 ou 4 elements, ligne "+cpt+ANSI_RED_BACKGROUND);
                         return false;
                     }
                     if(!ligneV.getLexemes().contains(this.lignes.get(i).getLexemes().get(1).replace("'", ""))){
-                        System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : Mot inconnu V, ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                        System.out.println(ANSI_RED_BACKGROUND+"Erreur : Mot inconnu V, ligne "+cpt+ANSI_RED_BACKGROUND);
                         return false;
                     }
                     if(this.lignes.get(i).getLexemes().size()>3){
-                        if(!ligneO.getLexemes().contains(this.lignes.get(i).getLexemes().get(3).replace("'", ""))){
-                            System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : Mot inconnu O, ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                        if(!ligneO.getLexemes().contains(this.lignes.get(i).getLexemes().get(3).replace("'", "")) && !this.lignes.get(i).getLexemes().get(3).replace("'", "").equals("#")){
+                            System.out.println(ANSI_RED_BACKGROUND+"Erreur : Mot inconnu O, ligne "+cpt+ANSI_RED_BACKGROUND);
                             return false;
                         }
                     }
@@ -225,7 +225,7 @@ public class AnalyseurLexical {
                         Integer.parseInt(this.lignes.get(i).getLexemes().get(0));
                         Integer.parseInt(this.lignes.get(i).getLexemes().get(2));
                     }catch(Exception ex){
-                        System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : Les etats doivent être numeriques, ligne " +cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
+                        System.out.println(ANSI_RED_BACKGROUND+"Erreur : Les etats doivent être numeriques, ligne " +cpt+ANSI_RED_BACKGROUND);
                         return false;
                     }
                     break;
@@ -233,7 +233,7 @@ public class AnalyseurLexical {
             cpt++;
         }
         if(!v || !e || !f){
-            System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : LIGNE OBLIGATOIRE NON INITIALISEE"+ANSI_WHITE+ANSI_RED_BACKGROUND);
+            System.out.println(ANSI_RED_BACKGROUND+"Erreur : LIGNE OBLIGATOIRE NON INITIALISEE"+ANSI_RED_BACKGROUND);
             return false;
         }
         return fichierOk;
