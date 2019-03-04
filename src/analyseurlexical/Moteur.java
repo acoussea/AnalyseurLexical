@@ -29,7 +29,11 @@ public class Moteur {
         
         AnalyseurLexical al = new AnalyseurLexical();
         al.afficheDescrLignes();
-        al.descrToDot();
+        //al.descrToDot();
+        al.traitementEntree("000\n"
+                + "101\n"
+                + "110\n"
+                + "###");
     }
     
 }

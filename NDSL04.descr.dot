@@ -1,0 +1,13 @@
+digraph G {
+	"" [shape=none]
+	0 [shape=doublecircle]
+	2 [shape=doublecircle]
+	"" ->0
+	"" ->2
+	0 -> 1[label="a/#"];
+	0 -> 2[label="c/#"];
+	1 -> 0[label="a/#"];
+	1 -> 2[label="b/#"];
+	2 -> 1[label="b/#"];
+	2 -> 0[label="c/#"];
+}

@@ -1,4 +1,7 @@
 digraph G {
+	5[shape=doublecircle]
+	"" [shape=none]
+	"" ->0
 	0 -> 1[label="a/#"];
 	0 -> 2[label="a/#"];
 	0 -> 5[label="b/#"];

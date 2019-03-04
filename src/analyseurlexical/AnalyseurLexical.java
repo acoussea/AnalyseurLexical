@@ -111,7 +111,8 @@ public class AnalyseurLexical {
                         for(Etat e : etats){
                             if(e.getNumero()==Integer.parseInt(l.getLexemes().get(0))){
                                 entree = e;
-                            }else if(e.getNumero()==Integer.parseInt(l.getLexemes().get(2))){
+                            }
+                            if(e.getNumero()==Integer.parseInt(l.getLexemes().get(2))){
                                 sortie = e;
                             }
                         }
@@ -120,7 +121,8 @@ public class AnalyseurLexical {
                         for(Etat e : etats){
                             if(e.getNumero()==Integer.parseInt(l.getLexemes().get(0))){
                                 entree = e;
-                            }else if(e.getNumero()==Integer.parseInt(l.getLexemes().get(2))){
+                            }
+                            if(e.getNumero()==Integer.parseInt(l.getLexemes().get(2))){
                                 sortie = e;
                             }
                         }
@@ -133,12 +135,80 @@ public class AnalyseurLexical {
         this.automate = new Automate(etats, trans);
     }
     
-   
+    public void traitementEntree(String entree){
+        System.out.println("Traitement des phrases lues :");
+        System.out.println("");
+        Etat init = this.automate.getInit();
+        String[] motsEntree = entree.split("\n");
+        Etat courant;
+        for(int i=0;i<motsEntree.length;i++){
+            boolean entreeTraitee = false;//true une fois que le premier carac de l'entrée est passé
+            courant = init;
+            String phraseSortie="";
+            boolean sortie = false;
+            if(!motsEntree[i].equals("###")){
+                String mot = motsEntree[i];
+                for(Transition t : this.automate.getTransitions()){
+                        if(t.getEtatEntree().getNumero()==init.getNumero() && !entreeTraitee){
+                            if(t.getEntree()==mot.charAt(0)){
+                                entreeTraitee=true;
+                                courant = t.getEtatSortie();
+                                if(t.getSortie()!='#'){
+                                    System.out.println("Etat courant : " + init.getNumero() + ",Entrée : " + mot.charAt(0) + ",Sortie : "+ t.getSortie() + ", Transition trouvée");
+                                    phraseSortie+=t.getSortie();
+                                }else{
+                                    System.out.println("Etat courant : " + init.getNumero() + ",Entrée : " + mot.charAt(0) + ", Transition trouvée");
+                                }
+                            }
+                        }
+                    }
+                for(int j=1;j<mot.length();j++){
+                    boolean transFind = false; //Pour ne pas lire toutes les transitions dans la boucle...
+                    for(Transition t : this.automate.getTransitions()){
+                        if(entreeTraitee && !sortie){
+                            if((t.getEtatEntree().getNumero() == courant.getNumero()) && (t.getEntree() == mot.charAt(j)) && !transFind){
+                                transFind=true;
+                                if(t.getSortie()!='#'){
+                                    System.out.println("Etat courant : " + courant.getNumero() + ",Entrée : " + mot.charAt(j) + ",Sortie : "+ t.getSortie() + ", Transition trouvée");
+                                    phraseSortie+=t.getSortie();
+                                }else{
+                                    System.out.println("Etat courant : " + courant.getNumero() + ",Entrée : " + mot.charAt(j) + ", Transition trouvée");
+                                }
+                                courant = t.getEtatSortie();
+                                if(j==mot.length()-1 && !sortie ){//dernier caractère, fin de chaine
+                                    sortie=true;
+                                    System.out.println("Etat courant : " + courant.getNumero() + " Fin de chaîne");
+                                    if(courant.isIsFinal()){
+                                        System.out.println("Entrée acceptante");
+                                    }else{
+                                        System.out.println("Entrée non-acceptante");
+                                    }
+                                    System.out.println("La sortie de cette phrase est : " + phraseSortie);
+                                    System.out.println("---------------------------");
+                                }
+                            }
+                        }else if(!sortie){
+                            System.out.println("Etat Courant : " + init.getNumero() +", Entrée : " + mot.charAt(j) +", Aucune transition");
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     public void descrToDot(){
         String fileDot = descr.getName()+".dot";
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileDot));
+            String init = Integer.toString(this.automate.getInit().getNumero());
             writer.write("digraph G {\n");
+            writer.write("\t\"\" [shape=none]\n");
+            for(Etat e : this.automate.getFinaux()){
+                    writer.write('\t'+Integer.toString(e.getNumero()) + " [shape=doublecircle]\n");
+            }
+            for(Etat e : this.automate.getInitiaux()){
+                writer.write("\t\"\" ->"+Integer.toString(e.getNumero())+"\n");
+            }
             for(Transition t : this.automate.getTransitions()){
                 String entree = Integer.toString(t.getEtatEntree().getNumero());
                 String sortie = Integer.toString(t.getEtatSortie().getNumero());
@@ -154,9 +224,12 @@ public class AnalyseurLexical {
     }
     
     public void afficheDescrLignes(){
+        System.out.println("---------------------------");
         for(Ligne l : this.getLignes()){
             System.out.println(l.toString());
         }
+        System.out.println("---------------------------");
+        System.out.println("");
     }
     
     public ArrayList<Ligne> getLignes() {

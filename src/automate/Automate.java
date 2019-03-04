@@ -50,6 +50,16 @@ public class Automate { //DETERMINISTE
         return init;
     }
     
+    public ArrayList<Etat> getInitiaux(){
+        ArrayList<Etat> init = new ArrayList<>();
+        for(Etat e : etats){
+            if(e.isIsInit()){
+                init.add(e);
+            }
+        }
+        return init;
+    }
+    
     public ArrayList<Etat> getFinaux(){
         ArrayList<Etat> finaux = new ArrayList<>();
         for(Etat e : etats){
