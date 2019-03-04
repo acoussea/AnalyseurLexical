@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author couss
  */
-public class Automate {
+public class Automate { //DETERMINISTE
     private ArrayList<Etat> etats;
     private ArrayList<Transition> transitions;
 
@@ -40,6 +40,24 @@ public class Automate {
         this.transitions = transitions;
     }
     
+    public Etat getInit(){
+        Etat init = null;
+        for(Etat e : etats){
+            if(e.isIsInit()){
+                init = e;
+            }
+        }
+        return init;
+    }
     
+    public ArrayList<Etat> getFinaux(){
+        ArrayList<Etat> finaux = new ArrayList<>();
+        for(Etat e : etats){
+            if(e.isIsFinal()){
+                finaux.add(e);
+            }
+        }
+        return finaux;
+    }
     
 }

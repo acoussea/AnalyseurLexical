@@ -84,8 +84,19 @@ public class AnalyseurLexical {
                             }
                         }
                     }
+                    
                     break;
                 case 'F' :
+                    boolean existeEntree = false;
+                    for(Etat e : etats){
+                        if(e.isIsFinal()){
+                            existeEntree=true;
+                        }
+                    }
+                    if(!existeEntree){//entree par def = 0
+                        etats.get(0).setIsInit(true);
+                    }
+                    //------
                     for(int i=0;i<l.getLexemes().size();i++){
                         for(Etat e : etats){
                             if(e.getNumero()==Integer.parseInt(l.getLexemes().get(i))){
@@ -118,9 +129,11 @@ public class AnalyseurLexical {
                     break;
             }
         }
+        
         this.automate = new Automate(etats, trans);
     }
     
+   
     public void descrToDot(){
         String fileDot = descr.getName()+".dot";
         try {
