@@ -15,6 +15,7 @@ public class Automate { //DETERMINISTE
     private ArrayList<Etat> etats;
     private ArrayList<Transition> transitions;
     private ArrayList<Character> voc;
+    private char meta;
 
     public Automate(ArrayList<Etat> etats, ArrayList<Transition> transitions) {
         this.etats = etats;
@@ -29,6 +30,13 @@ public class Automate { //DETERMINISTE
         this.etats = etats;
         this.transitions = transitions;
         this.voc = voc;
+    }
+    
+    public Automate(ArrayList<Etat> etats, ArrayList<Transition> transitions, ArrayList<Character> voc, char meta) {
+        this.etats = etats;
+        this.transitions = transitions;
+        this.voc = voc;
+        this.meta = meta;
     }
 
     public ArrayList<Etat> getEtats() {
@@ -79,6 +87,10 @@ public class Automate { //DETERMINISTE
 
     public ArrayList<Character> getVoc() {
         return voc;
+    }
+
+    public char getMeta() {
+        return meta;
     }
     
     

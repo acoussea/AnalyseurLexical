@@ -68,7 +68,7 @@ public class AEFND {
                 F.add(t);
                 ArrayList<Transition> trans_t = getTransitionsof(t, V);
                 for( Transition tra : trans_t) {
-                    if(tra.getEntree() == '#') {
+                    if(tra.getEntree() == a.getMeta()) {
                         P.add(tra.getEtatSortie());
                     }
                 }     
@@ -151,6 +151,7 @@ public class AEFND {
         String fileDot = name+".descr";
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileDot));
+            writer.write("M '" + a.getMeta() + "'");
             
             String voc = "\"";
             for (char c : a.getVoc()) {
