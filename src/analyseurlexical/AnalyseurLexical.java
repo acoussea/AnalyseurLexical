@@ -206,6 +206,9 @@ public class AnalyseurLexical {
                     break;
                 case 'V' :
                     ligneV = this.lignes.get(i);
+                    if(!ligneV.getLexemes().contains("#")) {
+                        ligneV.getLexemes().add("#");
+                    }
                     v=true;
                     break;
                 case 'O' :
@@ -225,11 +228,12 @@ public class AnalyseurLexical {
                             ligneO = new Ligne();
                             ligneO.getLexemes().add("#");
                         }
-                    }
-                    if(!ligneO.getLexemes().contains(this.lignes.get(i).getLexemes().get(3).replace("'", "")) && !this.lignes.get(i).getLexemes().get(3).replace("'", "").equals("#")){
+                        if(!ligneO.getLexemes().contains(this.lignes.get(i).getLexemes().get(3).replace("'", "")) && !this.lignes.get(i).getLexemes().get(3).replace("'", "").equals("#")){
                             System.out.println(ANSI_RED_BACKGROUND+"Erreur : Mot inconnu O, ligne "+cpt+ANSI_RED_BACKGROUND);
                             return false;
+                        }
                     }
+                    
                     if(Integer.parseInt(this.lignes.get(i).getLexemes().get(0))>=nbEtats || Integer.parseInt(this.lignes.get(i).getLexemes().get(2))>=nbEtats){
                         System.out.println(ANSI_RED_BACKGROUND+"Erreur : Etat superieur au nombre d'états max dans les transitions, ligne "+cpt+ANSI_RED_BACKGROUND);
                         return false;

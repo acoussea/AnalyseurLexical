@@ -95,13 +95,18 @@ public class AEFND {
         P.push(lambda_fermeture(a.getInitiaux(), a));
         ArrayList<ArrayList<Etat>> L = new ArrayList<>();
         ArrayList<TransitionND> D = new ArrayList<>();
+        ArrayList<Character> voc = a.getVoc();
+        for (char v : voc ) {
+            System.out.println(v);
+        }
+        voc.remove(voc.size()-1);
         
         while(!P.isEmpty()) {
             ArrayList<Etat> T = P.pop();
             if(!T.isEmpty()) {
                 if(!L.contains(T)) {
                     L.add(T);
-                    for(char c : a.getVoc()) {
+                    for(char c : voc) {
                         ArrayList<Etat> U = lambda_fermeture(transiter(T, c, a), a);
                         if(!U.isEmpty()) {
                             D.add(new TransitionND(T, U, c));
@@ -158,7 +163,7 @@ public class AEFND {
             String F = "";
             for (Etat e : a.getEtats()) {
                 if(getTransitionsof(e, a.getTransitions()).isEmpty()) {
-                    F+=e.getNumero();
+                    F+=e.getNumero() + " ";
                 }
             }
             writer.write("F " + F + "\n");
