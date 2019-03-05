@@ -1,0 +1,9 @@
+digraph G {
+	"" [shape=none]
+	2 [shape=doublecircle]
+	"" ->0
+	0 -> 1[label="a/#"];
+	1 -> 1[label="b/#"];
+	1 -> 1[label="c/#"];
+	1 -> 2[label="a/#"];
+}

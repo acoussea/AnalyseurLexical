@@ -22,6 +22,12 @@ public class Ligne {
         this.lexemes = new ArrayList<>();
         this.initLexemes();
     }
+
+    public Ligne() {
+        this.lexemes = new ArrayList<>();
+    }
+    
+    
     
     public void initLexemes(){
         String[] mots = this.contenu.split(" ");

@@ -71,6 +71,7 @@ public class AnalyseurLexical {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AnalyseurLexical.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         if(this.analyseLexicale()){
             this.createAutomate();
             System.out.println(ANSI_GREEN_BACKGROUND+"Analyse effectuée"+ANSI_GREEN_BACKGROUND);
@@ -216,6 +217,10 @@ public class AnalyseurLexical {
                         return false;
                     }
                     if(this.lignes.get(i).getLexemes().size()>3){
+                        if(ligneO==null){
+                            ligneO = new Ligne();
+                            ligneO.getLexemes().add("#");
+                        }
                         if(!ligneO.getLexemes().contains(this.lignes.get(i).getLexemes().get(3).replace("'", "")) && !this.lignes.get(i).getLexemes().get(3).replace("'", "").equals("#")){
                             System.out.println(ANSI_RED_BACKGROUND+"Erreur : Mot inconnu O, ligne "+cpt+ANSI_RED_BACKGROUND);
                             return false;
