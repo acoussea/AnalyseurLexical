@@ -93,7 +93,7 @@ public class Moteur {
                     System.out.println("Automate determinisé : ");
                     AnalyseurLexical aldet = new AnalyseurLexical(new File(al1.getDescr().getName()+".descr"));
                     aldet.afficheDescrLignes();
-                    if(!al1.isAutomateFalse()){
+                    if(!aldet.isAutomateFalse()){
                         while(menu2){
                             System.out.println("-----Analyse Automate non-Deterministe-----");
                             System.out.println("1 - Analyse d'entrée ");

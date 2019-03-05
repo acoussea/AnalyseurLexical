@@ -103,18 +103,18 @@ public class AEFND {
         
         while(!P.isEmpty()) {
             ArrayList<Etat> T = P.pop();
-            if(!T.isEmpty()) {
+            //if(!T.isEmpty()) {
                 if(!L.contains(T)) {
                     L.add(T);
                     for(char c : voc) {
                         ArrayList<Etat> U = lambda_fermeture(transiter(T, c, a), a);
-                        if(!U.isEmpty()) {
+                        //if(!U.isEmpty()) {
                             D.add(new TransitionND(T, U, c));
                             P.push(U);
-                        }
+                        //}
                     }
                 }
-            }
+            //}
         }
         
         System.out.println("Etats : ");
@@ -127,10 +127,10 @@ public class AEFND {
             System.out.println(t);
         }
         
-        return toAutomate(L, D, a.getVoc());
+        return toAutomate(L, D, a.getVoc(), a.getMeta());
     }
     
-    public Automate toAutomate(ArrayList<ArrayList<Etat>> L, ArrayList<TransitionND> D, ArrayList<Character> voc) {
+    public Automate toAutomate(ArrayList<ArrayList<Etat>> L, ArrayList<TransitionND> D, ArrayList<Character> voc, char meta) {
         ArrayList<Etat> etats = new ArrayList<>();
         ArrayList<Transition> transitions = new ArrayList<>();
         for (ArrayList<Etat> e : L) {
@@ -140,18 +140,32 @@ public class AEFND {
         etats.get(0).setIsInit(true);
         
         for (TransitionND t : D) {
-            transitions.add(new Transition(etats.get(L.indexOf(t.getEntree())),
-            etats.get(L.indexOf(t.getSortie())), t.getCaractere()));
+            Etat e = etats.get(L.indexOf(t.getEntree()));
+            
+            for(Etat a : t.getEntree()) {
+                if(a.isIsFinal())
+                    e.setIsFinal(true);
+            }
+            
+            Etat s = etats.get(L.indexOf(t.getSortie()));
+            
+            for(Etat b : t.getSortie()) {
+                if(b.isIsFinal())
+                    e.setIsFinal(true);
+            }
+            
+            transitions.add(new Transition(e, s, t.getCaractere()));
         }
         
-        return new Automate(etats, transitions, voc);
+        return new Automate(etats, transitions, voc, meta);
     }
     
     public void genereDescr(Automate a, String name){
         String fileDot = name+".descr";
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileDot));
-            writer.write("M '" + a.getMeta() + "'");
+            
+            writer.write("M '" + String.valueOf(a.getMeta()) + "'\n");
             
             String voc = "\"";
             for (char c : a.getVoc()) {
@@ -163,7 +177,7 @@ public class AEFND {
             
             String F = "";
             for (Etat e : a.getEtats()) {
-                if(getTransitionsof(e, a.getTransitions()).isEmpty()) {
+                if(e.isIsFinal()) {
                     F+=e.getNumero() + " ";
                 }
             }

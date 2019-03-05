@@ -154,6 +154,7 @@ public class AnalyseurLexical {
                     break;
             }
         }
+        System.out.println("Meta : " + this.meta.charAt(0));
         this.automate = new Automate(etats, trans, voc, this.meta.charAt(0));
     }
     
