@@ -39,6 +39,7 @@ public class AnalyseurLexical {
     private File descr;
     private Automate automate;
     private boolean automateFalse;
+    private String meta;
     
     public AnalyseurLexical() {
         FileDialog dialog = new FileDialog((Frame)null, "Select File to Open");
@@ -153,11 +154,12 @@ public class AnalyseurLexical {
                     break;
             }
         }
-        this.automate = new Automate(etats, trans, voc);
+        this.automate = new Automate(etats, trans, voc, this.meta.charAt(0));
     }
     
     
     public boolean analyseLexicale(){
+        this.meta ="#";
         int cpt=1;
         int nbEtats=1000;
         boolean fichierOk = true;
@@ -168,7 +170,7 @@ public class AnalyseurLexical {
                 case 'C' :
                     break;
                 case 'M' : 
-                    System.out.println("--------------------------------"+this.lignes.get(i).getLexemes().size());
+                    meta = this.lignes.get(i).getLexemes().get(0);
                     if(this.lignes.get(i).getLexemes().size()!=1){
                         System.out.println(ANSI_RED_BACKGROUND+"Erreur : La ligne M ne respecte pas sa description (1 caractère), ligne "+cpt+ANSI_RED_BACKGROUND);
                         return false;
@@ -206,8 +208,8 @@ public class AnalyseurLexical {
                     break;
                 case 'V' :
                     ligneV = this.lignes.get(i);
-                    if(!ligneV.getLexemes().contains("#")) {
-                        ligneV.getLexemes().add("#");
+                    if(!ligneV.getLexemes().contains(meta)) {
+                        ligneV.getLexemes().add(meta);
                     }
                     v=true;
                     break;
@@ -226,9 +228,9 @@ public class AnalyseurLexical {
                     if(this.lignes.get(i).getLexemes().size()>3){
                         if(ligneO==null){
                             ligneO = new Ligne();
-                            ligneO.getLexemes().add("#");
+                            ligneO.getLexemes().add(meta);
                         }
-                        if(!ligneO.getLexemes().contains(this.lignes.get(i).getLexemes().get(3).replace("'", "")) && !this.lignes.get(i).getLexemes().get(3).replace("'", "").equals("#")){
+                        if(!ligneO.getLexemes().contains(this.lignes.get(i).getLexemes().get(3).replace("'", "")) && !this.lignes.get(i).getLexemes().get(3).replace("'", "").equals(meta)){
                             System.out.println(ANSI_RED_BACKGROUND+"Erreur : Mot inconnu O, ligne "+cpt+ANSI_RED_BACKGROUND);
                             return false;
                         }
