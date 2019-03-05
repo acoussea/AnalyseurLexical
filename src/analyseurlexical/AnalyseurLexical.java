@@ -38,6 +38,7 @@ public class AnalyseurLexical {
     private ArrayList<Ligne> lignes;
     private File descr;
     private Automate automate;
+    private boolean automateFalse;
     
     public AnalyseurLexical() {
         FileDialog dialog = new FileDialog((Frame)null, "Select File to Open");
@@ -73,9 +74,11 @@ public class AnalyseurLexical {
         }
         
         if(this.analyseLexicale()){
+            this.automateFalse=false;
             this.createAutomate();
             System.out.println(ANSI_GREEN_BACKGROUND+"Analyse effectuée"+ANSI_GREEN_BACKGROUND);
         }else{
+            this.automateFalse=true;
             System.out.println(ANSI_RED_BACKGROUND+"Erreur : Analyse impossible"+ANSI_RED_BACKGROUND);
         }
     }
@@ -156,6 +159,7 @@ public class AnalyseurLexical {
     
     public boolean analyseLexicale(){
         int cpt=1;
+        int nbEtats=1000;
         boolean fichierOk = true;
         boolean v=false,e=false,f = false;
         Ligne ligneV=null,ligneO=null;
@@ -172,7 +176,7 @@ public class AnalyseurLexical {
                     break;
                 case 'E' :
                     try{
-                        Integer.parseInt(this.lignes.get(i).getLexemes().get(0));
+                        nbEtats = Integer.parseInt(this.lignes.get(i).getLexemes().get(0));
                     }catch(Exception exc){
                         System.out.println(ANSI_RED_BACKGROUND+ANSI_WHITE+"Erreur : E ne contient pas un nombre -> "+this.lignes.get(i).getLexemes().get(0)+", ligne "+cpt+ANSI_WHITE+ANSI_RED_BACKGROUND);
                         return false;
@@ -221,10 +225,14 @@ public class AnalyseurLexical {
                             ligneO = new Ligne();
                             ligneO.getLexemes().add("#");
                         }
-                        if(!ligneO.getLexemes().contains(this.lignes.get(i).getLexemes().get(3).replace("'", "")) && !this.lignes.get(i).getLexemes().get(3).replace("'", "").equals("#")){
+                    }
+                    if(!ligneO.getLexemes().contains(this.lignes.get(i).getLexemes().get(3).replace("'", "")) && !this.lignes.get(i).getLexemes().get(3).replace("'", "").equals("#")){
                             System.out.println(ANSI_RED_BACKGROUND+"Erreur : Mot inconnu O, ligne "+cpt+ANSI_RED_BACKGROUND);
                             return false;
-                        }
+                    }
+                    if(Integer.parseInt(this.lignes.get(i).getLexemes().get(0))>=nbEtats || Integer.parseInt(this.lignes.get(i).getLexemes().get(2))>=nbEtats){
+                        System.out.println(ANSI_RED_BACKGROUND+"Erreur : Etat superieur au nombre d'états max dans les transitions, ligne "+cpt+ANSI_RED_BACKGROUND);
+                        return false;
                     }
                     try{
                         Integer.parseInt(this.lignes.get(i).getLexemes().get(0));
@@ -260,7 +268,9 @@ public class AnalyseurLexical {
             boolean sortie = false;
             if(!motsEntree[i].equals("###")){
                 String mot = motsEntree[i];
+                int compteur=0;
                 for(Transition t : this.automate.getTransitions()){
+                    System.out.println(compteur++);
                         if(t.getEtatEntree().getNumero()==init.getNumero() && !entreeTraitee){
                             if(t.getEntree()==mot.charAt(0)){
                                 entreeTraitee=true;
@@ -366,6 +376,10 @@ public class AnalyseurLexical {
 
     public File getDescr() {
         return descr;
+    }
+
+    public boolean isAutomateFalse() {
+        return automateFalse;
     }
     
     
