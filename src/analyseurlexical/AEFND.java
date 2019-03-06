@@ -21,12 +21,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Classe AEFND ou Automate à Etats Finis Non Déterministe.
+ * Reprend toutes les méthodes nécessaires à la génération, l'exportation et l'affichage
+ * d'un automate non déterministe vers un automate déterministe.
  * @author Thomas
  */
 public class AEFND {
+    
+    /**
+     * Récupère la liste de tous les voisins F de la liste d'entrée T ayant comme transition
+     * le caractère placé en paramètre a.
+     * @param T Ensemble d'états
+     * @param a caractère transitoire
+     * @param aut Automate
+     * @return ArrayList<Etat>
+     */
     public ArrayList<Etat> transiter(ArrayList<Etat> T, char a, Automate aut) {
-        ArrayList<Etat> F = new ArrayList<>();
+        ArrayList<Etat> F = new ArrayList<>();          // Liste de sortie
         for(Etat e : T) {
             List<Transition> voisins = getTransitionsof(e, aut.getTransitions());
             for (Transition v : voisins) {
@@ -42,6 +53,7 @@ public class AEFND {
         return F;
     }
     
+    /*
     public void afficher(Automate a) {
         System.out.println("NON DETERMINISTE --> DETERMINISTE : ");
         for (Etat e : a.getEtats()) {
@@ -53,11 +65,19 @@ public class AEFND {
             + "(" + t.getEntree() + "/" + t.getSortie() + ")");
         }
     }
-    
+    */
+
+    /**
+     * Récupère la liste d'états F rassemblant tous les états non déterministes
+     * qui réalisent la lambda-fermeture des états qui composent la liste T.
+     * @param T Ensemble d'états
+     * @param a Automate
+     * @return ArrayList<Etat>
+     */
     public ArrayList<Etat> lambda_fermeture(List<Etat> T, Automate a) {
-        List<Transition> V = a.getTransitions();
-        ArrayList<Etat> F = new ArrayList<>();
-        ArrayList<Etat> P = new ArrayList<>();
+        List<Transition> V = a.getTransitions();        // Liste des transitions
+        ArrayList<Etat> F = new ArrayList<>();          // Liste de sortie
+        ArrayList<Etat> P = new ArrayList<>();          // Liste manipulée pendant l'opération
         for (Etat e : T) {
             P.add(e);
         }
@@ -79,9 +99,14 @@ public class AEFND {
         return F;
     }
     
-    
+    /**
+     * Récupère toutes les transitions dont l'état e est l'état entrant.
+     * @param e Etat
+     * @param trans Liste des transitions
+     * @return ArrayList<Transition>
+     */
     public ArrayList<Transition> getTransitionsof(Etat e, List<Transition> trans) {
-        ArrayList<Transition> tr = new ArrayList<>();
+        ArrayList<Transition> tr = new ArrayList<>();           // Liste des transitions (sortie de la méhode)
         for (Transition t : trans) {
             if(t.getEtatEntree().equals(e))
                 tr.add(t);
@@ -90,39 +115,40 @@ public class AEFND {
         return tr;
     }
     
+    /**
+     * Déterminise un automate non-déterministe.
+     * @param a Automate
+     * @return Automate
+     */
     public Automate dertiminiser(Automate a) {
-        Stack<ArrayList<Etat>> P = new Stack<>();
-        P.push(lambda_fermeture(a.getInitiaux(), a));
-        ArrayList<ArrayList<Etat>> L = new ArrayList<>();
-        ArrayList<TransitionND> D = new ArrayList<>();
-        ArrayList<Character> voc = a.getVoc();
+        Stack<ArrayList<Etat>> P = new Stack<>();           // Pile manipulée pendant l'opération
+        P.push(lambda_fermeture(a.getInitiaux(), a));       // Initialise la pile avec les lambda-fermetures des états initiaux
+        ArrayList<ArrayList<Etat>> L = new ArrayList<>();   // Liste des ensembles détats générés
+        ArrayList<TransitionND> D = new ArrayList<>();      // Liste des transitions générées
+        ArrayList<Character> voc = a.getVoc();              // Vocabulaire d'entrée
         for (char v : voc ) {
             System.out.println(v);
         }
         voc.remove(voc.size()-1);
         
         while(!P.isEmpty()) {
-            ArrayList<Etat> T = P.pop();
-            //if(!T.isEmpty()) {
-                if(!L.contains(T)) {
-                    L.add(T);
-                    for(char c : voc) {
-                        ArrayList<Etat> U = lambda_fermeture(transiter(T, c, a), a);
-                        //if(!U.isEmpty()) {
-                            D.add(new TransitionND(T, U, c));
-                            P.push(U);
-                        //}
+            ArrayList<Etat> T = P.pop();                    // Extraction du premier élement de la pile
+                if(!L.contains(T)) {                        // s'il n'est pas contenu dans la liste de fin
+                    L.add(T);                               // Ajout de l'élement dans L
+                    for(char c : voc) {                     // Parcours du vocabulaire d'entrée
+                        ArrayList<Etat> U = lambda_fermeture(transiter(T, c, a), a);    // Récupération de l'ensemble "Etat sortant"
+                            D.add(new TransitionND(T, U, c));       // Ajout de la transition T vers U passant par c
+                            P.push(U);                      // Ajout de U dans P
                     }
                 }
-            //}
         }
         
-        System.out.println("Etats : ");
+        System.out.println("Etats : ");         // Affichage des états (débuguage)
         for(ArrayList<Etat> e : L) {
             System.out.println(e);
         }
         
-        System.out.println("Transitions : ");
+        System.out.println("Transitions : ");   // Affichage des transitions (débuguage)
         for(TransitionND t : D) {
             System.out.println(t);
         }
@@ -130,18 +156,31 @@ public class AEFND {
         return toAutomate(L, D, a.getVoc(), a.getMeta());
     }
     
-    public Automate toAutomate(ArrayList<ArrayList<Etat>> L, ArrayList<TransitionND> D, ArrayList<Character> voc, char meta) {
+    /**
+     * Renvoie un automate généré en fonction des listes d'états L et transitions D déterminisés,
+     * du vocabulaire d'entrée voc et du méta-caractère meta : cette méthode est privée et utilisée
+     * en interne par déterminiser.
+     * @param L Liste des états déterministes(Ensembles d'états)
+     * @param D Liste des transitions déterministes
+     * @param voc Liste du vocabulaire d'entrée
+     * @param meta Méta-caractère
+     * @return Automate
+     */
+    private Automate toAutomate(ArrayList<ArrayList<Etat>> L, ArrayList<TransitionND> D, ArrayList<Character> voc, char meta) {
         ArrayList<Etat> etats = new ArrayList<>();
         ArrayList<Transition> transitions = new ArrayList<>();
-        for (ArrayList<Etat> e : L) {
+        for (ArrayList<Etat> e : L) {           // Création d'un état pour chaque ensemble d'états,
+                                                // ayant pour numéro la position de cet ensemble d'états dans la liste L
             etats.add(new Etat(L.indexOf(e), false, false));
         }
         
+        // Etat initial
         etats.get(0).setIsInit(true);
         
-        for (TransitionND t : D) {
+        for (TransitionND t : D) { // Transition d'ensembles d'états vers Transition d'états
             Etat e = etats.get(L.indexOf(t.getEntree()));
             
+            // Recherche des états finaux
             for(Etat a : t.getEntree()) {
                 if(a.isIsFinal())
                     e.setIsFinal(true);
@@ -149,17 +188,17 @@ public class AEFND {
             
             Etat s = etats.get(L.indexOf(t.getSortie()));
             
-            for(Etat b : t.getSortie()) {
-                if(b.isIsFinal())
-                    e.setIsFinal(true);
-            }
-            
             transitions.add(new Transition(e, s, t.getCaractere()));
         }
         
         return new Automate(etats, transitions, voc, meta);
     }
     
+    /**
+     * Génère un fichier .descr a partir d'un automate a.
+     * @param a Automate
+     * @param name Nom de fichier
+     */
     public void genereDescr(Automate a, String name){
         String fileDot = name+".descr";
         try {

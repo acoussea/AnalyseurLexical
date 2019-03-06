@@ -8,7 +8,7 @@ package automate;
 import java.util.ArrayList;
 
 /**
- *
+ * Transition manipulant des ensembles d'états entrants ou sortants.
  * @author Thomas
  */
 public class TransitionND {
