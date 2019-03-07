@@ -1,10 +1,6 @@
 digraph G {
 	"" [shape=none]
-	3 [shape=doublecircle]
 	4 [shape=doublecircle]
-	5 [shape=doublecircle]
-	6 [shape=doublecircle]
-	7 [shape=doublecircle]
 	"" ->0
 	0 -> 6[label="a/#"];
 	0 -> 5[label="b/#"];

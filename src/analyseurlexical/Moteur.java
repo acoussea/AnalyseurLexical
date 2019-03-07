@@ -21,8 +21,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author couss
+ * Classe main - IHM textuelle
+ * @author Axel Cousseau
+ * @version 1.0
  */
 public class Moteur {
 
@@ -30,53 +31,12 @@ public class Moteur {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        
-        //AnalyseurLexical al = new AnalyseurLexical();
-        //al.afficheDescrLignes();
-        //al.descrToDot();
-        /*al.traitementEntree("000\n"
-                + "101\n"
-                + "110\n"
-                + "###");*/
-        
-        
-        /*
-            PARTIE NON-DETERMINISTE
-        */
-        //AEFND afnd = new AEFND();
-        
-        /*
-        List<Etat> T = new ArrayList<>();
-        T.add(new Etat(0));
-        ArrayList<Etat> res = afnd.lambda_fermeture(T, al.getAutomate());
-        
-        System.out.println("Lambda fermeture : ");
-        for(Etat e : res) {
-            System.out.print(e.getNumero() + " ");
-        }
-        System.out.println();
-        
-        System.out.println("Transiter : ");
-        ArrayList<Etat> res2 = afnd.transiter(res, 'a', al.getAutomate());
-        for(Etat e : res2) {
-            System.out.print(e.getNumero() + " ");
-        }
-        System.out.println();
-        
-        System.out.println(" -- Vocabulaire -- ");
-        for (char c : al.getAutomate().getVoc()) {
-            System.out.print(c + " ");
-        }
-        */
-        //System.out.println("    --  DETERMINISATION --  ");
-        //Automate NDtoD = afnd.dertiminiser(al.getAutomate());
-        
-        //afnd.descrToDot(NDtoD, "NDD01");
-        
-        boolean menu1=true,menu2=true,menu3=true;
+       
+        //Affichage des menus jusqu'à arrêt
+        boolean menu1=true;
         
         while(menu1){
+            boolean menu2=true,menu3=true;
             System.out.println("----------SELECTION----------");
             System.out.println("1 - Analyse automate non-deterministe");
             System.out.println("2 - Analyse automate deterministe");
@@ -84,7 +44,7 @@ public class Moteur {
             Scanner sc1 = new Scanner(System.in);
             String s = sc1.nextLine();
             switch(s){
-                case "1" :
+                case "1" : // Choix = Automate deterministe
                     System.out.println("Automate non-determinisé :");
                     AnalyseurLexical al1 = new AnalyseurLexical();
                     al1.afficheDescrLignes();
