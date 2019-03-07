@@ -6,8 +6,8 @@
 package automate;
 
 /**
- * Représentation d'une transition ->> EtatEntree + EtatSortie + MotEntree + Mot sortie
- * ==> Transition d'un état à un autre suite à l'entrée d'un mot, retournant un mot de sortie
+ * Représentation d'une transition -= EtatEntree + EtatSortie + MotEntree + Mot sortie
+ * == Transition d'un état à un autre suite à l'entrée d'un mot, retournant un mot de sortie
  * @author Axel Cousseau
  */
 public class Transition {

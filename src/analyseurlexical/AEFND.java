@@ -34,7 +34,7 @@ public class AEFND {
      * @param T Ensemble d'états
      * @param a caractère transitoire
      * @param aut Automate
-     * @return ArrayList<Etat>
+     * @return liste d'Etats
      */
     public ArrayList<Etat> transiter(ArrayList<Etat> T, char a, Automate aut) {
         ArrayList<Etat> F = new ArrayList<>();          // Liste de sortie
@@ -72,7 +72,7 @@ public class AEFND {
      * qui réalisent la lambda-fermeture des états qui composent la liste T.
      * @param T Ensemble d'états
      * @param a Automate
-     * @return ArrayList<Etat>
+     * @return liste d'etats
      */
     public ArrayList<Etat> lambda_fermeture(List<Etat> T, Automate a) {
         List<Transition> V = a.getTransitions();        // Liste des transitions
@@ -103,7 +103,7 @@ public class AEFND {
      * Récupère toutes les transitions dont l'état e est l'état entrant.
      * @param e Etat
      * @param trans Liste des transitions
-     * @return ArrayList<Transition>
+     * @return Liste de transitions
      */
     public ArrayList<Transition> getTransitionsof(Etat e, List<Transition> trans) {
         ArrayList<Transition> tr = new ArrayList<>();           // Liste des transitions (sortie de la méhode)

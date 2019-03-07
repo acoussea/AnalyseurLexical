@@ -306,6 +306,10 @@ public class AnalyseurLexical {
             boolean sortie = false;
             if(!motsEntree[i].equals("###")){ //### = indique fin de saisie
                 String mot = motsEntree[i];
+                if(!this.automate.getVoc().contains(mot.charAt(0))){
+                        System.out.println(ANSI_RED_BACKGROUND+"Erreur : Mot d'entrée non inclu dans le vocabulaire"+ANSI_RED_BACKGROUND);
+                        System.out.println("---------------------------");    
+                }
                 for(Transition t : this.automate.getTransitions()){
                         if(t.getEtatEntree().getNumero()==init.getNumero() && !entreeTraitee){
                             if(t.getEntree()==mot.charAt(0)){
@@ -321,6 +325,10 @@ public class AnalyseurLexical {
                         }
                     }
                 for(int j=1;j<mot.length();j++){
+                    if(!this.automate.getVoc().contains(mot.charAt(j))){
+                        System.out.println(ANSI_RED_BACKGROUND+"Erreur : Mot d'entrée non inclu dans le vocabulaire"+ANSI_RED_BACKGROUND);
+                        System.out.println("---------------------------");
+                    }
                     boolean transFind = false; //Pour ne pas lire toutes les transitions dans la boucle...
                     for(Transition t : this.automate.getTransitions()){
                         if(entreeTraitee && !sortie){
@@ -349,6 +357,7 @@ public class AnalyseurLexical {
                             System.out.println("Etat Courant : " + init.getNumero() +", Entrée : " + mot.charAt(j) +", Aucune transition");
                         }
                     }
+                    
                 }
             }
         }

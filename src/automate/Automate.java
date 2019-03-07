@@ -20,7 +20,7 @@ public class Automate {
     /**
      * Constructeur simple
      * @param etats Liste des états de l'automate
-     * @param transitions Liste des transitions de l'automate -> (EtatEntree, EtatSortie, motEntree, motSortie)
+     * @param transitions Liste des transitions de l'automate = (EtatEntree, EtatSortie, motEntree, motSortie)
      * @author Axel Cousseau
      */
     public Automate(ArrayList<Etat> etats, ArrayList<Transition> transitions) {
@@ -41,7 +41,7 @@ public class Automate {
     /**
      * Constructeur 
      * @param etats Liste des états de l'automate
-     * @param transitions Liste des transitions de l'automate -> (EtatEntree, EtatSortie, motEntree, motSortie)
+     * @param transitions Liste des transitions de l'automate = (EtatEntree, EtatSortie, motEntree, motSortie)
      * @param voc Liste des caractères acceptés en entrée (vocabulaire d'entrée)
      * @author Axel Cousseau
      */
@@ -53,7 +53,7 @@ public class Automate {
     
     /**
      * @param etats Liste des états de l'automate
-     * @param transitions Liste des transitions de l'automate -> (EtatEntree, EtatSortie, motEntree, motSortie)
+     * @param transitions Liste des transitions de l'automate = (EtatEntree, EtatSortie, motEntree, motSortie)
      * @param voc Liste des caractères acceptés en entrée (vocabulaire d'entrée)
      * @param meta le méta-caractère = mot vide
      * @author Axel Cousseau
