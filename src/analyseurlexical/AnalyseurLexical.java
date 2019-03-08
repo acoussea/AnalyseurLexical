@@ -294,6 +294,7 @@ public class AnalyseurLexical {
      * @author Axel Cousseau
      */
     public void traitementEntree(String entree){
+        
         System.out.println("Traitement des phrases lues :");
         System.out.println("");
         Etat init = this.automate.getInit();
@@ -324,6 +325,7 @@ public class AnalyseurLexical {
                             }
                         }
                     }
+                boolean lectureImpossible=false;//si l'état courant n'a pas de transition vers le mot lu
                 for(int j=1;j<mot.length();j++){
                     if(!this.automate.getVoc().contains(mot.charAt(j))){
                         System.out.println(ANSI_RED_BACKGROUND+"Erreur : Mot d'entrée non inclu dans le vocabulaire"+ANSI_RED_BACKGROUND);
@@ -356,8 +358,15 @@ public class AnalyseurLexical {
                         }else if(!sortie){
                             System.out.println("Etat Courant : " + init.getNumero() +", Entrée : " + mot.charAt(j) +", Aucune transition");
                         }
+                        
+                    }
+                    if(!transFind){
+                        lectureImpossible=true;
                     }
                     
+                }
+                if(lectureImpossible){
+                    System.out.println(ANSI_RED_BACKGROUND+"Lecture impossible, l'etat courant n'a pas de transition pour le mot lu"+ANSI_RED_BACKGROUND);
                 }
             }
         }
